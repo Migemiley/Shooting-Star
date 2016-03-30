@@ -23,6 +23,7 @@ public class ShootingStar extends Canvas {
 	public static final int szer = 800;
 	public static final int wys = 600;
 	public static final int szyb = 60;
+	public long usedTime;
 	public HashMap sprites;
 	public int pX, pY, sX;
 	public BufferStrategy strat;
@@ -85,6 +86,10 @@ public class ShootingStar extends Canvas {
 		grafika.setColor(Color.DARK_GRAY);
 		grafika.fillRect(0, 0, getWidth(), getHeight());
 		grafika.drawImage(getSprite("star1.png"), pX, pY, this);
+		grafika.setColor(Color.white);
+		if (usedTime > 0)
+			grafika.drawString(String.valueOf(1000/usedTime)+" fps",5,wys-50);
+		else grafika.drawString("-- fps",5,wys-50);
 		strat.show();
 	}
 	
@@ -95,9 +100,12 @@ public class ShootingStar extends Canvas {
 	}
 	
 	public void game() {
+		usedTime = 1000;
 		while (isVisible()) {
+			long startTime = System.currentTimeMillis();
 			updateWorld();
 			paintWorld();
+			usedTime = System.currentTimeMillis()-startTime;
 			try {
 				Thread.sleep(szyb);
 			} catch (InterruptedException e) {}
