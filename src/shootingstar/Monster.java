@@ -9,10 +9,12 @@ public class Monster extends Actor{
 	
 	public Monster(Stage stage) {
 		super(stage);
-		setSpriteName("star1.png");
+		setSpriteNames( new String[] {"star1.png","star2.png"});
+		setFrameSpeed(25);
 	}
 	
 	public void act() {
+		super.act();
 		x += sx;
 		if (x < 0 || x > Stage.szer)
 			sx = -sx;

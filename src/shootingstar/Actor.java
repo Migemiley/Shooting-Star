@@ -14,10 +14,17 @@ public class Actor {
 	protected String spriteName;
 	protected Stage stage;
 	protected SpriteCache spriteCache;
+	protected int currentFrame;
+	protected String[] spriteNames;
+	protected int frameSpeed;
+	protected int t;
 	
 	public Actor (Stage stage) {
 		this.stage = stage;
 		spriteCache = stage.getSpriteCache();
+		currentFrame = 0;
+		frameSpeed = 1;
+		t = 0;
 	}
 	
 	public void paint (Graphics2D grafika) {
@@ -32,11 +39,15 @@ public class Actor {
 	
 	public String getSpriteName() { return spriteName; }
 	
-	public void setSpriteName(String string) {
-		spriteName = string;
-		BufferedImage image = spriteCache.getSprite(spriteName);
-		wys = image.getHeight();
-		szer = image.getWidth();
+	public void setSpriteNames(String[] names) {
+		spriteNames = names;
+		wys = 0;
+		szer = 0;
+		for (int i = 0; i < names.length; i++ ) {
+			BufferedImage image = spriteCache.getSprite(spriteNames[i]);
+			wys = Math.max(wys,image.getHeight());
+			wys = Math.max(szer,image.getWidth());
+		}
 	}
 	
 	public int getHeight() { return wys; }
@@ -44,6 +55,14 @@ public class Actor {
 	public void setHeight(int i) {wys = i; }
 	public void setWidth(int i) { szer = i; }
 	
-	public void act() { }
+	public int getFrameSpeed() {return frameSpeed; }
+	public void setFrameSpeed(int i) {frameSpeed = i; }
 	
+	public void act() {
+		t++;
+		if (t % frameSpeed == 0){
+			t=0;
+			currentFrame = (currentFrame + 1) % spriteNames.length;
+		}
+	}
 }
