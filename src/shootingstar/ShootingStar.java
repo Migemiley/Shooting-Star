@@ -22,9 +22,12 @@ public class ShootingStar extends Canvas {
 	public static final int szer = 800;
 	public static final int wys = 600;
 	public HashMap sprites;
+	public int pX, pY;
 	
 	// Konstruktor ShootingStar(), w którym zostaje zainicjowane okno aplikacji
 	public ShootingStar(){
+		pX = szer/2;
+		pY = wys/2;
 		sprites = new HashMap();
 		
 		JFrame okno = new JFrame("Shooting Star");
@@ -70,10 +73,23 @@ public class ShootingStar extends Canvas {
 	// Metoda odpowiadająca za rysowanie
 	@Override
 	public void paint(Graphics grafika){
-		grafika.drawImage(getSprite("star1.png"), 50, 50, this);
+		grafika.drawImage(getSprite("star1.png"), pX, pY, this);
+	}
+	
+	public void updateWorld() {
+		pX = (int) (Math.random()*szer);
+		pY = (int) (Math.random()*wys);
+	}
+	
+	public void game() {
+		while (isVisible()) {
+			updateWorld();
+			paint(getGraphics());
+		}
 	}
 	
 	public static void main(String[] args) {
 		ShootingStar inv = new ShootingStar();
+		inv.game();
 	}
 }
