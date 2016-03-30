@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferStrategy;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import java.util.HashMap;
@@ -21,13 +22,16 @@ public class ShootingStar extends Canvas {
 	// Dodanie globalnych zmiennych dotyczących szerokości i wysokości okna aplikacji
 	public static final int szer = 800;
 	public static final int wys = 600;
+	public static final int szyb = 60;
 	public HashMap sprites;
-	public int pX, pY;
+	public int pX, pY, sX;
+	public BufferStrategy strat;
 	
 	// Konstruktor ShootingStar(), w którym zostaje zainicjowane okno aplikacji
 	public ShootingStar(){
 		pX = szer/2;
 		pY = wys/2;
+		sX = 2;
 		sprites = new HashMap();
 		
 		JFrame okno = new JFrame("Shooting Star");
@@ -45,6 +49,10 @@ public class ShootingStar extends Canvas {
 				System.exit(0);
 			}
 		});
+		okno.setResizable(false);
+		createBufferStrategy(2);
+		strat = getBufferStrategy();
+		requestFocus();
 	}
 	
 	// Metoda odpowiadająca za wczytywanie grafik
@@ -71,22 +79,31 @@ public class ShootingStar extends Canvas {
 	}
 	
 	// Metoda odpowiadająca za rysowanie
-	@Override
-	public void paint(Graphics grafika){
+
+	public void paintWorld(){
+		Graphics grafika = strat.getDrawGraphics();
+		grafika.setColor(Color.DARK_GRAY);
+		grafika.fillRect(0, 0, getWidth(), getHeight());
 		grafika.drawImage(getSprite("star1.png"), pX, pY, this);
+		strat.show();
 	}
 	
 	public void updateWorld() {
-		pX = (int) (Math.random()*szer);
-		pY = (int) (Math.random()*wys);
+		pX += sX;
+		if (pX < 0 || pX > szer)
+			sX = -sX;
 	}
 	
 	public void game() {
 		while (isVisible()) {
 			updateWorld();
-			paint(getGraphics());
-		}
+			paintWorld();
+			try {
+				Thread.sleep(szyb);
+			} catch (InterruptedException e) {}
+			}
 	}
+	
 	
 	public static void main(String[] args) {
 		ShootingStar inv = new ShootingStar();
