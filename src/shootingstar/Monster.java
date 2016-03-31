@@ -5,21 +5,18 @@ package shootingstar;
  * @author Agnieszka Makowska https://github.com/Migemiley
  */
 public class Monster extends Actor{
-	protected int sx;
+	protected int vx;
 	
 	public Monster(Stage stage) {
 		super(stage);
-		setSpriteNames( new String[] {"star1.png","star2.png"});
-		setFrameSpeed(25);
+		setSpriteName("star1.png");
 	}
 	
 	public void act() {
-		super.act();
-		x += sx;
+		x+=vx;
 		if (x < 0 || x > Stage.szer)
-			sx = -sx;
+			vx = -vx;
 	}
-	
-	public int getVx() { return sx; }
-	public void setVx(int i) { sx = i; }
+	public int getVx() { return vx; }
+	public void setVx(int i) {vx = i; }
 }

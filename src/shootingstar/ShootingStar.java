@@ -70,8 +70,8 @@ public class ShootingStar extends Canvas implements Stage {
 		}
 		grafika.setColor(Color.white);
 		if (usedTime > 0)
-			grafika.drawString(String.valueOf(1000/usedTime)+" fps",5,Stage.wys-50);
-		else grafika.drawString("-- fps",5,Stage.wys-50);
+			grafika.drawString(String.valueOf(1000/usedTime)+" fps",0,Stage.wys-50);
+		else grafika.drawString("-- fps",0,Stage.wys-50);
 		strat.show();
 	}
 	
