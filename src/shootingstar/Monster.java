@@ -4,19 +4,36 @@ package shootingstar;
  *
  * @author Agnieszka Makowska https://github.com/Migemiley
  */
-public class Monster extends Actor{
+public class Monster extends Actor {
 	protected int vx;
-	
+	String []pot = { "Star1.png"};
+
 	public Monster(Stage stage) {
 		super(stage);
-		setSpriteName("star1.png");
+		setSpriteNames( pot );
+		setFrameSpeed(10);
+	}
+
+	public void spawn() {
+		Monster m = new Monster(stage);
+		m.setX((int) (Math.random() * (Stage.SZEROKOSC - getWidth())));
+		m.setY((int) (Math.random() * Stage.WYSOKOSC_GRY / 2));
+		m.setVx((int) 1);
+		stage.addActor(m);
 	}
 	
 	public void act() {
-		x+=vx;
-		if (x < 0 || x > Stage.szer)
+		super.act();
+		x += vx;
+		if (x < 0 || x > (Stage.SZEROKOSC - getWidth())) {
 			vx = -vx;
+		}
 	}
-	public int getVx() { return vx; }
-	public void setVx(int i) {vx = i; }
+	public int getVx() {
+		return vx;
+	}
+
+	public void setVx(int i) {
+		vx = i;
+	}
 }
