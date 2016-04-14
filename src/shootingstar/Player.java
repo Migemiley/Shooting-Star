@@ -11,10 +11,14 @@ public class Player extends Actor {
 	protected int vx;
 	protected int vy;
 	private boolean up, down, left, right;
+	public static final int MAX_BOMBS = 50;
+	private int clusterBombs;
+	public int ExhaustedBullet = 0, ExhaustedBomb = 0;
 
 	public Player(Stage stage) {
 		super(stage);
 		setSpriteNames(new String[] { "kstar.png" });
+		clusterBombs = MAX_BOMBS;
 	}
 
 	public void act() {
@@ -59,7 +63,28 @@ public class Player extends Actor {
 		if (right)
 			vx = PLAYER_SPEED;
 	}
+	
+	public void fire() {
+		Bullet b = new Bullet(stage);
+		b.setX(x + (getWidth() / 2 - b.getWidth() / 2));
+		b.setY(y - b.getHeight());
+		stage.addActor(b);
+	}
+	
+	public void fireCluster() {
+		if (clusterBombs == 0)
+			return;
 
+		clusterBombs--;
+		stage.addActor(new Bomb(stage, Bomb.UP_LEFT, x + getWidth() / 2, y
+				+ getHeight() / 2));
+		stage.addActor(new Bomb(stage, Bomb.UP, x + getWidth() / 2, y
+				+ getHeight() / 2));
+		stage.addActor(new Bomb(stage, Bomb.UP_RIGHT, x + getWidth() / 2, y
+				+ getHeight() / 2));
+		
+	}
+	
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_DOWN:
@@ -73,6 +98,12 @@ public class Player extends Actor {
 			break;
 		case KeyEvent.VK_RIGHT:
 			right = false;
+			break;
+		case KeyEvent.VK_SPACE:
+			ExhaustedBullet = 0;
+			break;
+		case KeyEvent.VK_B:
+			ExhaustedBomb = 0;
 			break;
 		}
 		updateSpeed();
@@ -94,6 +125,18 @@ public class Player extends Actor {
 			break;
 		case KeyEvent.VK_ESCAPE:
 			System.exit(0);
+			break;
+		case KeyEvent.VK_SPACE:
+			if (ExhaustedBullet == 0) {
+				fire();
+			}
+			ExhaustedBullet = 1;
+			break;
+		case KeyEvent.VK_B:
+			if (ExhaustedBomb == 0) {
+				fireCluster();
+			}
+			ExhaustedBomb = 1;
 			break;
 		}
 		updateSpeed();

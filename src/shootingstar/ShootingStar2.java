@@ -60,6 +60,10 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
 		firstTime = System.currentTimeMillis(); //FPS
     }
     
+	 public void addActor(Actor a) {
+		actors.add(a);
+	}
+	
     public SpriteCache getSpriteCache() {
 		return spriteCache;
 	}
@@ -114,16 +118,14 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
         int i = 0;
 		while (i < actors.size()) {
 			Actor m = (Actor) actors.get(i);
-			m.act();
-			i++;
+			if (m.isMarkedForRemoval()) {
+				actors.remove(i);
+			} else {
+				m.act();
+				i++;
+			}
         }
 		player.act();
     }
 
-
-	@Override
-	public void addActor(Actor a) {
-		// TODO Auto-generated method stub
-		
-	}
 }
