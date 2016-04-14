@@ -6,12 +6,12 @@ package shootingstar;
  */
 public class Monster extends Actor {
 	protected int vx;
-	String []pot = { "Star1.png"};
+	String []mon = { "Star1.png"};
 
 	public Monster(Stage stage) {
 		super(stage);
-		setSpriteNames( pot );
-		setFrameSpeed(10);
+		setSpriteNames( mon );
+		setFrameSpeed(5);
 	}
 
 	public void spawn() {

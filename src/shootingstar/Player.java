@@ -7,7 +7,7 @@ package shootingstar;
 import java.awt.event.KeyEvent;
 
 public class Player extends Actor {
-	protected static final int PLAYER_SPEED = 4;
+	protected static final int PLAYER_SPEED = 5;
 	protected int vx;
 	protected int vy;
 	private boolean up, down, left, right;
