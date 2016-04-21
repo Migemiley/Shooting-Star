@@ -7,6 +7,7 @@ package shootingstar;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
 
 public class Actor {
 	protected int x, y;
@@ -94,6 +95,13 @@ public class Actor {
 
 	public void setFrameSpeed(int i) {
 		frameSpeed = i;
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, width, height);
+	}
+	
+	public void collision(Actor a) {
 	}
 	
 	public void act() {

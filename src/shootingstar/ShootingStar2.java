@@ -18,6 +18,9 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
+import java.awt.Font;
 
 class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener {
     private final int DELAY = 20;
@@ -78,6 +81,7 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
     			m.paint(g2d);
     		}
     		player.paint(g2d);
+			paintStatus(g2d);
     		g.setColor(Color.white);
     		if (usedTime > 0)
     			g.drawString(String.valueOf(1000 / usedTime)+" fps",5,WYSOKOSC-35);
@@ -112,9 +116,67 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
 
 	public void keyTyped(KeyEvent e) {
 	}
+	
+	public void paintStatus(Graphics2D g) {
+		paintScore(g);
+		paintHP(g);
+		paintAmmo(g);
+	}
+	
+	public void paintHP(Graphics2D g) {
+		g.setPaint(Color.pink);
+		g.fillRect(280, Stage.WYSOKOSC_GRY, Player.MAX_HP, 30);
+		g.setPaint(Color.CYAN);
+		g.fillRect(280 + player.getHp(), Stage.WYSOKOSC_GRY,
+				200 - player.getHp(), 30);
+		g.setFont(new Font("Arial", Font.BOLD, 20));
+		g.setPaint(Color.yellow);
+		g.drawString("HP:", 230, Stage.WYSOKOSC_GRY + 20);
+	}
+
+	public void paintScore(Graphics2D g) {
+		g.setFont(new Font("Arial", Font.BOLD, 20));
+		g.setPaint(Color.yellow);
+		g.drawString("Punkty:", 20, Stage.WYSOKOSC_GRY + 20);
+		g.setPaint(Color.yellow);
+		g.drawString(player.getScore() + "", 100, Stage.WYSOKOSC_GRY + 20);
+	}
+
+	public void paintAmmo(Graphics2D g) {
+		int xBase = 280 + Player.MAX_HP + 10;
+		g.setFont(new Font("Arial", Font.BOLD, 15));
+		g.setPaint(Color.yellow);
+		g.drawString("Bomby:", xBase, Stage.WYSOKOSC_GRY + 8);
+		for (int i = 0; i < player.getClusterBombs(); i++) {
+			BufferedImage bomb = spriteCache.getSprite("hyper.png");
+			g.drawImage(bomb, xBase + i * bomb.getWidth() + 52,
+					Stage.WYSOKOSC_GRY, this);
+		}
+	}
+	
+    public void checkCollision() {
+    	Rectangle playerBounds = player.getBounds();
+		for (int i = 0; i < actors.size(); i++) {
+			Actor a1 = (Actor) actors.get(i);
+			Rectangle r1 = a1.getBounds();
+			if (r1.intersects(playerBounds)) {
+				player.collision(a1);
+				a1.collision(player);
+			}
+			for (int j = i + 1; j < actors.size(); j++) {
+				Actor a2 = (Actor) actors.get(j);
+				Rectangle r2 = a2.getBounds();
+				if (r1.intersects(r2)) {
+					a1.collision(a2);
+					a2.collision(a1);
+				}
+			}
+		}
+    }
     
     public void actionPerformed(ActionEvent e) {
-    	repaint();
+    	checkCollision();
+		repaint();
         int i = 0;
 		while (i < actors.size()) {
 			Actor m = (Actor) actors.get(i);
