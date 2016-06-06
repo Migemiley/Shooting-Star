@@ -12,16 +12,17 @@ public class Player extends Actor {
 	protected int vy;
 	private boolean up, down, left, right;
 	public static final int MAX_HP = 250;
-	public static final int MAX_BOMBS = 50;
+	public static final int MAX_BOMBS = 25, MAX_MISSLE = 7;
 	public static int score;
 	private int hp;
-	private int clusterBombs;
-	public int ExhaustedBullet = 0, ExhaustedBomb = 0;
+	private int clusterBombs, missle;
+	public int ExhaustedBullet = 0, ExhaustedBomb = 0, ExhaustedMissle = 0;
 
 	public Player(Stage stage) {
 		super(stage);
 		setSpriteNames(new String[] { "kstar.png" });
 		clusterBombs = MAX_BOMBS;
+		missle = MAX_MISSLE;
 		hp = MAX_HP;
 	}
 	
@@ -56,6 +57,10 @@ public class Player extends Actor {
 	public int getClusterBombs() {
 		return clusterBombs;
 	}
+	
+	public int getMissle() {    
+		return missle;          
+	}  
 
 	public void act() {
 		super.act();
@@ -121,6 +126,16 @@ public class Player extends Actor {
 		
 	}
 	
+	public void fireMissle() {
+		if (missle == 0)
+			return;
+		missle--;
+		Missle m = new Missle(stage);
+		m.setX(x + (getWidth() / 2 - m.getWidth() / 2));
+		m.setY(y - m.getHeight());
+		stage.addActor(m);
+	}
+	
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_DOWN:
@@ -140,6 +155,9 @@ public class Player extends Actor {
 			break;
 		case KeyEvent.VK_B:
 			ExhaustedBomb = 0;
+			break;
+			case KeyEvent.VK_M:
+			ExhaustedMissle = 0;
 			break;
 		}
 		updateSpeed();
@@ -173,6 +191,12 @@ public class Player extends Actor {
 				fireCluster();
 			}
 			ExhaustedBomb = 1;
+			break;
+			case KeyEvent.VK_M:
+			if (ExhaustedMissle == 0) {
+				fireMissle();
+			}
+			ExhaustedMissle = 1;
 			break;
 		}
 		updateSpeed();
