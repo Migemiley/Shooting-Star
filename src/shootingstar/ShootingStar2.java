@@ -21,6 +21,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 import java.awt.Font;
+import java.awt.TexturePaint;
 
 class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener {
     private final int DELAY = 20;
@@ -34,6 +35,10 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
 	private Player player;
 	public long usedTime;
 	public long firstTime;
+	private boolean gameLose = false;
+	private BufferedImage kosmos;
+	private int mov;
+	public long movTime;
 	
 	public Player getPlayer() {
 		return player;
@@ -75,6 +80,8 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
         super.paint(g);
         if (status) {
         	Graphics2D g2d = (Graphics2D)g;
+			kosmos = spriteCache.getSprite("cosmos.png");
+        	g2d.setPaint(new TexturePaint(kosmos, new Rectangle(0, mov, kosmos.getWidth(), kosmos.getHeight())));
     		g2d.fillRect(0, 0, getWidth(), getHeight());
     		for (int i = 0; i < actors.size(); i++) {
     			Actor m = (Actor) actors.get(i);
@@ -82,6 +89,12 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
     		}
     		player.paint(g2d);
 			paintStatus(g2d);
+			if (gameLose) { 
+    			try {
+				paintGameOver(g2d);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} }
     		g.setColor(Color.white);
     		if (usedTime > 0)
     			g.drawString(String.valueOf(1000 / usedTime)+" fps",5,WYSOKOSC-35);
@@ -104,6 +117,11 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
 		 paint(g);
 		 if((t - firstTime) % 20 == 0)
 			 usedTime = System.currentTimeMillis() - t;
+		 if(movTime == 0 || t - movTime > 10)
+		 {
+			 movTime = System.currentTimeMillis();
+			 mov+=2;
+		 }
     }
     
     public void keyPressed(KeyEvent e) {
@@ -162,6 +180,17 @@ class ShootingStar2 extends Canvas implements ActionListener, Stage, KeyListener
 			g.drawImage(missle, xBaseMissle + i * missle.getWidth() + 52,
 					yBaseMissle - 14, this);
 		}
+	}
+	
+	public void gameLose() {
+		gameLose = true;
+	}
+	
+	public void paintGameOver(Graphics2D g) throws FileNotFoundException{
+		g.setColor(Color.cyan);
+		g.setFont(new Font("Arial", Font.BOLD, 50));
+		g.drawString("Game Over", Stage.SZEROKOSC / 2 - 100, Stage.WYSOKOSC / 2);
+		timer.stop();
 	}
 	
     public void checkCollision() {

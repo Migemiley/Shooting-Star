@@ -5,6 +5,7 @@ package shootingstar;
  * @author Agnieszka Makowska https://github.com/Migemiley
  */
 public class Monster extends Actor {
+	protected static final double FIRING_FREQUENCY = 0.009;
 	protected int vx;
 	String []mon = { "Star1.png"};
 
@@ -12,6 +13,13 @@ public class Monster extends Actor {
 		super(stage);
 		setSpriteNames( mon );
 		setFrameSpeed(5);
+	}
+	
+	public void fire() {
+		EBullet m = new EBullet(stage);
+		m.setX(x + getWidth() / 2);
+		m.setY(y + getHeight());
+		stage.addActor(m);
 	}
 
 	public void spawn() {
@@ -28,6 +36,8 @@ public class Monster extends Actor {
 		if (x < 0 || x > (Stage.SZEROKOSC - getWidth())) {
 			vx = -vx;
 		}
+		if (Math.random() < FIRING_FREQUENCY)
+			fire();
 	}
 	public int getVx() {
 		return vx;

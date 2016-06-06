@@ -18,4 +18,6 @@ public interface Stage extends ImageObserver {
 	public void addActor(Actor a);
 	
 	public Player getPlayer();
+	
+	public void gameLose();
 }
