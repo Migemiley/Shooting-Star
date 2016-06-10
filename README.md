@@ -15,4 +15,4 @@ Jej nazwa to „Shooting Star”, a polegaæ bêdzie na zestrzeliwaniu wrogów, pojawia
 6. Usuniêcie kolizji oraz dodanie statystyk.
 7. Dodanie mo¿liwoœci uœmiercenia gracza.
 8. Dodanie grafiki t³a oraz dodanie odradzania siê wrogów.
-9. Dodanie prostych dŸwiêków i optymalizacja kodu.
+9. Optymalizacja kodu.
